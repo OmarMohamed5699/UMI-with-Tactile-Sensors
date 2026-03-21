@@ -67,7 +67,7 @@ cup reorientation, grasping, and placement on a plate.
 > Mean error of 12.43 ms represents sub-frame synchronisation accuracy.
 > All 24 demonstrations achieved the <100 ms success criterion.
 
-![Synchronisation error across 24 demonstrations](github data/Screenshot from 2026-03-21 21-24-44.png)
+![Synchronisation error across 24 demonstrations](github data/sync_error.png)
 
 ### Key findings
 
@@ -92,7 +92,7 @@ cup reorientation, grasping, and placement on a plate.
 | Data format            | Zarr (UMI SLAM pipeline compatible)        |
 
 
-![Assembled UMI gripper with the sensors](UMI with Tactile sensors)
+![Assembled UMI gripper with the sensors](System.jpg)
 ---
 
 

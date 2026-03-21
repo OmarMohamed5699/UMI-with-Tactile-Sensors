@@ -11,7 +11,8 @@ imitation learning.
 
 ## 📽️ Demo
 
-![Demo of the data collection process](github data/GX010076.mp4)
+![Demo of the data collection process](GX010076-ezgif.com-optimize.gif
+)
 
 ---
 

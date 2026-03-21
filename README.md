@@ -11,7 +11,7 @@ imitation learning.
 
 ## 📽️ Demo
 
-![Assembled UMI system with tactile sensors](assets/system.jpg)
+![Demo of the data collection process](github data/GX010076.mp4)
 
 ---
 
@@ -67,7 +67,7 @@ cup reorientation, grasping, and placement on a plate.
 > Mean error of 12.43 ms represents sub-frame synchronisation accuracy.
 > All 24 demonstrations achieved the <100 ms success criterion.
 
-![Synchronisation error across 24 demonstrations](assets/sync_error.png)
+![Synchronisation error across 24 demonstrations](github data/Screenshot from 2026-03-21 21-24-44.png)
 
 ### Key findings
 
@@ -80,7 +80,7 @@ cup reorientation, grasping, and placement on a plate.
 
 ---
 
-## ⚙️ Hardware
+## Hardware
 
 | Component              | Specification                              |
 |------------------------|--------------------------------------------|
@@ -91,58 +91,14 @@ cup reorientation, grasping, and placement on a plate.
 | Gripper redesign tool  | SolidWorks                                 |
 | Data format            | Zarr (UMI SLAM pipeline compatible)        |
 
+
+![Assembled UMI gripper with the sensors](UMI with Tactile sensors)
 ---
 
-## ⚙️ Installation
-```bash
-git clone https://github.com/YOUR_USERNAME/umi-tactile.git
-cd umi-tactile
-
-# ROS2 Humble required
-conda create -n umi-tactile python=3.10
-conda activate umi-tactile
-
-pip install -r requirements.txt
-```
-
-> Requires ROS 2 Humble, PapillArray PTSDK (Contactile), and UMI pipeline.
 
 ---
 
-## ▶️ Usage
-```bash
-# 1. Launch tactile sensor node (C++)
-ros2 run tactile_driver sensor_node
-
-# 2. Launch Python data organisation node
-ros2 run tactile_driver data_node
-
-# 3. Launch QR code timestamp generator
-ros2 run sync qr_generator
-
-# 4. Start ROS2 bag recording
-ros2 bag record -o demo_session /tactile /qr_timestamps
-
-# 5. Post-process: detect QR codes, synchronise, integrate into Zarr
-python scripts/process_demos.py --demo_dir /path/to/demos
-```
-
----
-
-## 📁 Repo structure
-```
-umi-tactile/
-├── tactile_driver/      # ROS2 C++ + Python nodes for PapillArray
-├── sync/                # QR code generator + temporal transformation
-├── scripts/             # Post-processing: QR detection, interpolation,
-│                        # Zarr integration
-├── assets/              # System photos and sync error plot
-└── README.md
-```
-
----
-
-## 🙏 References & acknowledgements
+## References & acknowledgements
 
 - UMI: Chi et al., arXiv:2402.10329
 - PapillArray sensor: Contactile Pty Ltd, PTS 2.0 Spec
@@ -153,6 +109,3 @@ Supervised by Prof. Niko Suenderhauf · QUT Centre for Robotics
 School of Electrical Engineering and Robotics, QUT, 2025
 
 
-  year   = {2025}
-}
-```

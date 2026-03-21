@@ -67,7 +67,7 @@ cup reorientation, grasping, and placement on a plate.
 > Mean error of 12.43 ms represents sub-frame synchronisation accuracy.
 > All 24 demonstrations achieved the <100 ms success criterion.
 
-![Synchronisation error across 24 demonstrations](assets/sync_error.png)
+![Synchronisation error across 24 demonstrations](sync_error.png)
 
 ### Key findings
 

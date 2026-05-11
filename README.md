@@ -109,4 +109,5 @@ cup reorientation, grasping, and placement on a plate.
 Supervised by Prof. Niko Suenderhauf · QUT Centre for Robotics
 School of Electrical Engineering and Robotics, QUT, 2025
 
+The C++ code and libraries in the Cpp_code file are authored by Contactile (https://contactile.com) and are included with permission from Dr. Heba Khamis, CEO and Co-founder of Contactile. All rights to this code remain with Contactile.
 

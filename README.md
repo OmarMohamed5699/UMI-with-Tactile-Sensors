@@ -93,6 +93,106 @@ cup reorientation, grasping, and placement on a plate.
 | Data format            | Zarr (UMI SLAM pipeline compatible)        |
 
 
+## Software
+ 
+| Component              | Specification                                                                 |
+|------------------------|-------------------------------------------------------------------------------|
+| Operating system       | Ubuntu 22.04 LTS                                                              |
+| Middleware             | ROS2 Humble                                                                   |
+| Languages              | C++ (sensor acquisition at 1000 Hz), Python 3.10 (sync, processing, dataset) |
+| Build system           | colcon + CMake                                                                |
+| ROS2 packages          | `papillarray_ros2_v2` (sensor driver), `sensor_interfaces` (custom messages) |
+| Sensor interface       | Serial communication via `/dev/ttyACM*`                                       |
+| Data recording         | `ros2 bag`                                                                    |
+| SLAM pipeline          | UMI SLAM pipeline (Chi et al., 2024)                                          |
+| Data format            | Zarr (UMI-compatible replay buffer)                                           |
+| Key Python libraries   | numpy, opencv-python, zarr, scipy, matplotlib                                 |
+ 
+---
+ 
+## How to run
+ 
+### Prerequisites
+ 
+- ROS2 Humble installed and sourced
+- PapillArray sensors connected via USB (verify with `ls /dev/ttyACM*`)
+- GoPro Hero 9 mounted on the UMI gripper
+- Python dependencies installed (`pip install -r requirements.txt`)
+- 
+### Setup
+ 
+```bash
+# Grant serial port access (per session)
+sudo chmod 666 /dev/ttyACM0
+sudo chmod 666 /dev/ttyACM1
+ 
+# Build the workspace
+colcon build --packages-select sensor_interfaces papillarray_ros2_v2
+
+source install/setup.bash
+```
+ 
+### Data collection
+ 
+The pipeline runs across four terminals during demonstration capture:
+ 
+**Terminal 1 — Tactile handler with QR synchronisation**
+```bash
+python3 src/papillarray_ros2_v2/src/tactile_handler_with_qr_sync.py
+```
+ 
+**Terminal 2 — PapillArray sensor driver**
+```bash
+ros2 launch papillarray_ros2_v2 papillarray.launch.py com_port:=/dev/ttyACM1
+```
+ 
+**Terminal 3 — Record tactile data**
+```bash
+ros2 bag record /umi_gripper/tactile_60hz -o <output_dir>/demo_XXX_tactile
+```
+ 
+**Terminal 4 — Display QR codes for sync anchoring**
+```bash
+python3 src/papillarray_ros2_v2/src/continuous_qr_display.py
+```
+ 
+Record demonstrations with the GoPro while the system captures synchronised tactile data. QR codes must appear in the camera frame at the start and end of each demonstration.
+ 
+### Post-processing
+ 
+After collecting demonstrations, process the raw data into a UMI-compatible Zarr dataset:
+ 
+**1. Batch process demonstrations**
+```bash
+cd universal_manipulation_interface-main
+./batch_process_demos.sh
+```
+ 
+**2. Run the SLAM pipeline**
+```bash
+python run_slam_pipeline.py <umi_data_dir>
+```
+ 
+**3. Generate the replay buffer**
+```bash
+python scripts_slam_pipeline/07_generate_replay_buffer.py \
+    -o <umi_data_dir>/dataset.zarr.zip \
+    <umi_data_dir>
+```
+ 
+**4. Merge tactile data into the Zarr dataset**
+```bash
+python add_tactile_multidemo_qr.py \
+    --zarr_path <umi_data_dir>/dataset.zarr.zip \
+    --qr_sync <demo_dir>/qr_sync_data.json \
+    --tactile_bags <demo_dir>/<demo_name>_tactile \
+    --output dataset_with_tactile.zarr.zip \
+    --video_fps 60
+```
+ 
+The final `dataset_with_tactile.zarr.zip` contains synchronised camera observations, gripper trajectories, and tactile measurements — ready for imitation learning.
+
+
 ![Assembled UMI gripper with the sensors](System.jpg)
 ---
 
